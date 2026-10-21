@@ -1,0 +1,307 @@
+[
+ {
+  "dump": "field",
+  "layer": "bgA2",
+  "keep": [
+   1,
+   9
+  ],
+  "fill": 1,
+  "aa": 9,
+  "font": "NanumSquareNeo-dEb.ttf",
+  "items": [
+   {
+    "box": [
+     96,
+     93,
+     124,
+     105
+    ],
+    "text": "체력",
+    "size": 11
+   },
+   {
+    "box": [
+     96,
+     109,
+     124,
+     121
+    ],
+    "text": "칭호",
+    "size": 11
+   },
+   {
+    "box": [
+     96,
+     125,
+     124,
+     137
+    ],
+    "text": "도구",
+    "size": 11
+   }
+  ]
+ },
+ {
+  "dump": "menu",
+  "layer": "objB",
+  "keep": [
+   1,
+   9,
+   12
+  ],
+  "fill": 1,
+  "outline": 12,
+  "font": "Galmuri9.bdf",
+  "center": true,
+  "items": [
+   {
+    "box": [
+     3,
+     3,
+     30,
+     13
+    ],
+    "text": "뒤로",
+    "dy": 0
+   }
+  ]
+ },
+ {
+  "dump": "m_gear",
+  "layer": "bgB2",
+  "keep": [
+   1,
+   4,
+   12
+  ],
+  "ink": [
+   1
+  ],
+  "fill": 1,
+  "outline": 12,
+  "font": "Galmuri9.bdf",
+  "center": true,
+  "items": [
+   {
+    "box": [
+     3,
+     42,
+     29,
+     53
+    ],
+    "text": "정리"
+   }
+  ]
+ },
+ {
+  "dump": "m_gear",
+  "layer": "bgB2",
+  "keep": [
+   1,
+   8,
+   12
+  ],
+  "fill": 1,
+  "aa": 8,
+  "outline": 12,
+  "font": "NanumSquareNeo-dEb.ttf",
+  "items": [
+   {
+    "box": [
+     104,
+     34,
+     127,
+     46
+    ],
+    "text": "체력",
+    "size": 10
+   }
+  ]
+ },
+ {
+  "dump": "m_memo",
+  "layer": "objB",
+  "keep": [
+   1,
+   9,
+   12
+  ],
+  "fill": 1,
+  "aa": 9,
+  "outline": 12,
+  "items": [
+   {
+    "box": [
+     20,
+     45,
+     230,
+     59
+    ],
+    "text": "친구 코드 등록",
+    "size": 12
+   },
+   {
+    "box": [
+     20,
+     77,
+     230,
+     91
+    ],
+    "text": "친구 코드 확인",
+    "size": 12
+   },
+   {
+    "box": [
+     20,
+     109,
+     230,
+     123
+    ],
+    "text": "친구 리스트",
+    "size": 12
+   }
+  ]
+ },
+ {
+  "dump": "s_gear",
+  "layer": "bgB1",
+  "keep": [
+   1,
+   8,
+   12
+  ],
+  "fill": 1,
+  "aa": 8,
+  "outline": 12,
+  "font": "Galmuri9.bdf",
+  "center": true,
+  "items": [
+   {
+    "box": [
+     56,
+     9,
+     88,
+     23
+    ],
+    "text": "낚싯대",
+    "dy": 2
+   }
+  ]
+ },
+ {
+  "dump": "s_rec",
+  "layer": "bgB2",
+  "keep": [
+   1,
+   9
+  ],
+  "fill": 1,
+  "aa": 9,
+  "font": "NanumSquareNeo-dEb.ttf",
+  "items": [
+   {
+    "box": [
+     40,
+     76,
+     100,
+     89
+    ],
+    "text": "최대 크기",
+    "size": 11
+   },
+   {
+    "box": [
+     158,
+     76,
+     187,
+     89
+    ],
+    "text": "조과",
+    "size": 11
+   },
+   {
+    "box": [
+     216,
+     77,
+     232,
+     89
+    ],
+    "text": "마리",
+    "font": "Galmuri9.bdf",
+    "dy": 1,
+    "spacing": -1,
+    "dx": 0
+   }
+  ]
+ },
+ {
+  "dump": "field",
+  "layer": "objB",
+  "keep": [
+   1,
+   4,
+   12
+  ],
+  "fill": 1,
+  "outline": 12,
+  "font": "Galmuri9.bdf",
+  "center": true,
+  "items": [
+   {
+    "box": [
+     3,
+     3,
+     30,
+     12
+    ],
+    "text": "메뉴"
+   }
+  ]
+ },
+ {
+  "dump": "w1",
+  "layer": "bgB2",
+  "keep": [
+   1,
+   9,
+   12
+  ],
+  "fill": 1,
+  "aa": 9,
+  "outline": 12,
+  "center": true,
+  "items": [
+   {
+    "box": [
+     54,
+     13,
+     107,
+     26
+    ],
+    "text": "이름 변경",
+    "size": 11
+   },
+   {
+    "box": [
+     128,
+     13,
+     181,
+     26
+    ],
+    "text": "코드 변경",
+    "size": 11
+   },
+   {
+    "box": [
+     203,
+     13,
+     244,
+     26
+    ],
+    "text": "삭제",
+    "size": 11
+   }
+  ]
+ }
+]

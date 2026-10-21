@@ -1,0 +1,3 @@
+[{"wait":600},{"keys":"start","wait":120},{"keys":"a","wait":120},{"keys":"a","rep":2,"wait":60},{"touch":[192,45],"wait":120},{"keys":"a","wait":200},
+ {"keys":"a","wait":150,"rep":9},{"wait":120},{"keys":"a","wait":150,"rep":30},{"keys":"a","wait":120,"rep":60},{"keys":"a","wait":70,"rep":150},
+ {"shot":"field","save":"field.dst"}]

@@ -51,6 +51,11 @@ def render_items(loc,v,items,keep,fill,aa,outline,font,center):
                 if (x,y) in loc: out[(x,y)]=face
         f=gfxtext.ttf(it.get('font',font),size)
         m,_=gfxtext.render_mask(text,f,x1-x0,y1-y0,dx=it.get('dx',1),dy=it.get('dy',0),center=it.get('center',center),spacing=it.get('spacing',0))
+        if 'bitmap' in it:   # 공간이 좁아 손으로 찍은 픽셀 글자
+            m=m.point(lambda _:0)
+            for r,row in enumerate(it['bitmap']):
+                for c,ch in enumerate(row):
+                    if ch=='#': m.putpixel((c+it.get('dx',0),r+it.get('dy',0)),255)
         g=gfxtext.stylize(m,fill=it.get('fill',fill),aa=it.get('aa',aa),outline=it.get('outline',outline),th=140,aath=70)
         for y in range(y1-y0):
             for x in range(x1-x0):
@@ -70,6 +75,11 @@ def _apply(rom,spec):
     allbox=(min(i['box'][0] for i in items),min(i['box'][1] for i in items),max(i['box'][2] for i in items),max(i['box'][3] for i in items))
     srcs=sources(rom,loc,v,allbox,tuple(spec.get('ink',[spec.get('fill',1)])))
     out=render_items(loc,v,items,tuple(spec.get('keep',[])),spec.get('fill',1),spec.get('aa'),spec.get('outline'),spec.get('font','NanumSquareNeo-eHv.ttf'),spec.get('center',False))
+    # 박스 안에서만 쓰이는 타일(다른 칸과 공유되지 않음)은 써도 안전
+    users={}
+    for (X,Y),(b,h) in loc.items(): users.setdefault(b//32*32,set()).add((X//8,Y//8))
+    bx=(allbox[0]//8,allbox[1]//8,(allbox[2]-1)//8,(allbox[3]-1)//8)
+    exclusive={t for t,cells in users.items() if all(bx[0]<=cx<=bx[2] and bx[1]<=cy<=bx[3] for cx,cy in cells) and len(cells)==1}
     n=0
     for fn,en,et,delta,c,tot in srcs:
         d=bytes(rom.getFileByName(fn)); comp=fn.endswith('.rln')
@@ -79,7 +89,7 @@ def _apply(rom,spec):
         raw=bytearray(d[e['off']:e['off']+e['size']])
         for (X,Y),val in out.items():
             b,h=loc[(X,Y)]; o=b-delta
-            if b//32*32 not in sources.tiles and not spec.get('all_tiles',spec['layer'].startswith('obj')): continue
+            if b//32*32 not in sources.tiles and b//32*32 not in exclusive and not spec.get('all_tiles',spec['layer'].startswith('obj')): continue
             if 0<=o<len(raw): raw[o]=(raw[o]&~(15<<(4*h)))|(val<<(4*h))
         d[e['off']:e['off']+e['size']]=raw
         rom.setFileByName(fn,rln.encode(bytes(d)) if comp else bytes(d)); n+=1

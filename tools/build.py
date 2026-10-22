@@ -151,24 +151,44 @@ def build_arm9(arm9,tr,cmap,stat):
     starts=[x[0] for x in items]+[len(d)]
     for j,(o,l,new) in enumerate(items):
         end=o+l+1
-        while end<starts[j+1] and d[end]==0: end+=1
+        # 정렬 여백(4바이트 미만)만 포함. 그 이상의 0 구간은 실행 중 변수일 수 있어 쓰지 않는다.
+        while end<starts[j+1] and d[end]==0 and end%4: end+=1
         free.append([o,end])
         d[o:end]=b'\0'*(end-o)
-    placed={}
-    # 원래 자리에 들어가면 그대로, 아니면 빈 공간 할당
-    pending=[]
-    for (o,l,new),(fo,fe) in zip(items,free):
-        if len(new)+1<=fe-fo:
-            d[o:o+len(new)]=new; placed[o]=o
-            free[free.index([fo,fe])]=[o+len(new)+1,fe]
-        else: pending.append((o,new))
-    pending.sort(key=lambda x:-len(x[1]))
-    for o,new in pending:
-        for f in free:
+    def bestfit(spans,new):
+        best=None
+        for f in spans:
             a=(f[0]+1)&~1
-            if f[1]-a>=len(new)+1:
-                d[a:a+len(new)]=new; d[a+len(new)]=0; placed[o]=a; f[0]=a+len(new)+1; break
-        else: raise SystemExit('ARM9 문자열 공간 부족: %x'%o)
+            if f[1]-a>=len(new)+1 and (best is None or f[1]-a<best[1]-((best[0]+1)&~1)): best=f
+        return best
+    def attempt(keep_own):
+        dd=bytearray(d); spans=[list(f) for f in free]; placed={}; pend=[]
+        own={}
+        for (o,l,new),f in zip(items,spans):
+            if keep_own and len(new)+1<=f[1]-f[0]:
+                dd[o:o+len(new)]=new; placed[o]=o; own[o]=(f,new); f[0]=o+len(new)+1
+            else: pend.append((o,new))
+        pend.sort(key=lambda x:-len(x[1]))
+        while pend:
+            o,new=pend.pop(0)
+            bf=bestfit(spans,new)
+            if bf is None:
+                # 원래 자리에 있는 문자열 하나를 다른 조각으로 옮겨 그 칸을 비운다
+                cand=None
+                for ko,(f,kn) in own.items():
+                    if f[1]-ko>=len(new)+1 and bestfit([x for x in spans if x is not f],kn) is not None:
+                        if cand is None or f[1]-ko<cand[1][0][1]-cand[0]: cand=(ko,(f,kn))
+                if cand is None:
+                    stat.setdefault('arm9_fail',[]).append((hex(o),len(new),keep_own)); return None
+                ko,(f,kn)=cand; del own[ko]
+                dd[ko:ko+len(kn)+1]=bytes(len(kn)+1); f[0]=ko
+                pend.append((ko,kn)); pend.append((o,new)); pend.sort(key=lambda x:-len(x[1]))
+                continue
+            a=(bf[0]+1)&~1; dd[a:a+len(new)]=new; dd[a+len(new)]=0; placed[o]=a; bf[0]=a+len(new)+1
+        return dd,placed
+    r=attempt(True) or attempt(False)
+    if r is None: raise SystemExit('ARM9 문자열 공간 부족')
+    d,placed=r
     moved=0
     for o,a in placed.items():
         if o!=a:
@@ -198,6 +218,7 @@ def main():
     rom.setFileByName('fon12_0s.arc',bytes(AUX))
     rom.arm9=build_arm9(rom.arm9,arm9_tr,cmap,stat)
     extra.apply(rom,cmap,stat)
+    print('ARM9 실패:',stat.get('arm9_fail'))
     print('번역 적용',stat['tr'],'미번역',len(stat['miss']),'ARM9 포인터 이동',stat.get('arm9_moved'))
     for m in stat['miss'][:20]: print('  미번역:',m[:60])
     json.dump({k:v for k,v in cmap.items()},open(os.path.join(W,'cmap.json'),'w',encoding='utf8'),ensure_ascii=False)

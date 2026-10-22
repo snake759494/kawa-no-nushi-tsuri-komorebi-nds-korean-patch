@@ -134,8 +134,33 @@ def patch_sheet(rom,fn,ename,ops):
             d[e['off']:e['off']+e['size']]=raw
     rom.setFileByName(fn,rln.encode(bytes(d)) if comp else bytes(d))
 
+def patch_lure_labels(rom):
+    """pt_29 icon3a: 아이콘 아래 'ルアー' 작은 글씨(색 7, 8~13행)를 '루어'로."""
+    import gridpatch
+    fn='map/pt_29.rln'
+    d=bytearray(rln.decode(bytes(rom.getFileByName(fn))))
+    e=[x for x in rln.entries(bytes(d)) if x['name']=='icon3a'][0]
+    raw=bytearray(d[e['off']:e['off']+e['size']])
+    def row(k,y): 
+        loc=gridpatch.loc_for(k,1); return bytes(raw[loc[(x,y)][0]]>>(4*loc[(x,y)][1])&15 for x in range(32))
+    ref=[row(30,y) for y in range(8,14)]
+    f=gfxtext.ttf('Galmuri9.bdf',9)
+    m,_=gfxtext.render_mask('루어',f,24,9,dx=0,dy=0)
+    for k in range(len(raw)//512):
+        if [row(k,y) for y in range(8,14)]!=ref: continue
+        loc=gridpatch.loc_for(k,1)
+        def put(x,y,v):
+            b,h=loc[(x,y)]; raw[b]=(raw[b]&~(15<<(4*h)))|(v<<(4*h))
+        for y in range(7,16):
+            for x in range(4,30): put(x,y,0)
+        for y in range(9):
+            for x in range(24):
+                if m.getpixel((x,y))>=128: put(6+x,7+y,7)
+    d[e['off']:e['off']+e['size']]=raw
+    rom.setFileByName(fn,rln.encode(bytes(d)))
+
 def apply(rom,stat):
-    patch_sheet(rom,'map/pt_18.rln','pt18obj2',[dict(row=0,box=(14,3,160,15),text='주인을 찾아서',face=7,aa=9,center=False),dict(row=1,box=(14,3,160,15),text='낚시 수행',face=7,aa=9,center=False)])
+    patch_sheet(rom,'map/pt_18.rln','pt18obj2',[dict(row=0,box=(6,3,160,15),text='주인을 찾아서',face=7,aa=9,center=False),dict(row=1,box=(6,3,160,15),text='낚시 수행',face=7,aa=9,center=False),dict(row=0,box=(166,3,196,15),text='일째',face=7,aa=9,size=11),dict(row=1,box=(166,3,196,15),text='일째',face=7,aa=9,size=11)])
     patch_sheet(rom,'map/pt_19.rln','pt19obja',[dict(row=0,box=(2,2,31,15),text='미끼',face=0,aa=9,outline=12),dict(row=0,box=(31,2,63,15),text='루어',face=0,aa=9,outline=12),dict(row=0,box=(63,2,99,15),text='플라이',face=0,aa=9,outline=12,size=10)])
     for fn in ['menu_common.arc','menu_common2.arc','map/pt_04.rln','map/pt_04_2.rln','map/pt_17.rln','map/pt_21.rln','map/pt_29.rln','map/pt_34.rln']:
         patch_sheet(rom,fn,'mp_namea',[dict(row=r,box=(24,2,38,14),text='위',face=11,aa=10,size=10) for r in (12,13,14,15)])
@@ -149,6 +174,8 @@ def apply(rom,stat):
     patch_logo(rom,'map/title1_0.rln',True)
     patch_logo(rom,'map/title1_1.rln',False)
     patch_tutorial(rom)
+    import fxpatch
+    fxpatch.patch(rom)
     import sprpatch
     import barpatch
     barpatch.patch_all(rom)
@@ -157,8 +184,10 @@ def apply(rom,stat):
     btnpatch.patch(rom,'map/pt_18.rln','pt18obj',ref,['낚시 도구','아이템','어망','카드 폴더','조과 기록','부탁 메모','친구 코드','저장'],(25,29,110,48),offsets=[i*0x1000 for i in range(8)])
     for fn,en in (('map/pt_27.rln','pt27objt'),('map/pt_36.rln','pt36objt')):
         gridpatch.patch(rom,fn,en,[dict(first=0,count=6,box=(8,2,184,18),text='마릿수 승부!'),dict(first=8,count=6,box=(8,2,184,18),text='크기 승부!')])
-    for fn in ('menu_common.arc','menu_common2.arc'):
-        gridpatch.patch(rom,fn,'obj_01a',[dict(first=1,count=1,box=(3,2,30,12),text='메뉴',font='Galmuri9.bdf',aa=None,keep=(1,9,12)),dict(first=2,count=1,box=(3,2,30,12),text='그만',font='Galmuri9.bdf',aa=None,keep=(1,9,12))])
+    gridpatch.patch(rom,'map/pt_31.rln','pt_31_t',[dict(first=25,count=2,box=(8,3,44,17),text='지움',size=11)])
+    patch_lure_labels(rom)
     import scrpatch
     scrpatch.apply_all(rom,stat)
+    import uisheet
+    uisheet.patch(rom,stat)
     stat['gfx_sheets']=n

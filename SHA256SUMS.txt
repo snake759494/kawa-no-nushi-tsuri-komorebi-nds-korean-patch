@@ -1,3 +1,3 @@
 97de248e676e6e340073c84bc2f25c71b9697e1e0e157f47e2baba52ce181db0  Kawa no Nushi Tsuri - Komorebi no Tani, Seseragi no Uta (Japan).nds
-3869e429a33cf05a14e76ac0c7a66eead613c54a1da46c9e1ce7f014621f8389  Kawa no Nushi Tsuri - Komorebi no Tani, Seseragi no Uta (Korean).nds
-74822dc7bcae4316cb26e3eef61bd59e280b9b7a8eb7679168d58c65f68f2c7a  Kawa_no_Nushi_Tsuri_KR.xdelta
+778a95dab008fde6a1d1aaf5c3fe9191d1a5434f18b7f843869f3e1f7af6bce6  Kawa no Nushi Tsuri - Komorebi no Tani, Seseragi no Uta (Korean).nds
+db332ad8ad7a6420cb08b918a78c1d4b64ecac0348dba49643bee0cfec3f822f  Kawa_no_Nushi_Tsuri_KR.xdelta

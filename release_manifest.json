@@ -2,13 +2,13 @@
   "game": "강의 낚시꾼: 나무 그늘 골짜기·시냇물의 노래 (川のぬし釣り こもれびの谷 せせらぎの詩)",
   "platform": "Nintendo DS",
   "game_code": "ANYJ",
-  "version": "1.0.0",
-  "tag": "v1.0.0",
+  "version": "1.0.1",
+  "tag": "v1.0.1",
   "repository": "snake759494/kawa-no-nushi-tsuri-komorebi-nds-korean-patch",
   "release_asset": {
     "name": "Kawa_no_Nushi_Tsuri_KR.xdelta",
-    "bytes": 530288,
-    "sha256": "74822dc7bcae4316cb26e3eef61bd59e280b9b7a8eb7679168d58c65f68f2c7a"
+    "bytes": 648178,
+    "sha256": "db332ad8ad7a6420cb08b918a78c1d4b64ecac0348dba49643bee0cfec3f822f"
   },
   "source": {
     "name": "Kawa no Nushi Tsuri - Komorebi no Tani, Seseragi no Uta (Japan).nds",
@@ -17,8 +17,8 @@
   },
   "output": {
     "name": "Kawa no Nushi Tsuri - Komorebi no Tani, Seseragi no Uta (Korean).nds",
-    "bytes": 36507976,
-    "sha256": "3869e429a33cf05a14e76ac0c7a66eead613c54a1da46c9e1ce7f014621f8389"
+    "bytes": 36498760,
+    "sha256": "778a95dab008fde6a1d1aaf5c3fe9191d1a5434f18b7f843869f3e1f7af6bce6"
   },
   "xdelta_options": [
     "-0",
